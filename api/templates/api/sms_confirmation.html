@@ -1,0 +1,88 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html dir="rtl" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تایید کد - EVENT</title>
+    <link rel="icon" href="{% static 'images/icon.png' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(238, 238, 238);
+        }
+
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid rgba(199, 199, 199, 0.404);
+            border-radius: 12px;
+            text-align: center;
+            background-color: rgba(199, 199, 199, 0.404);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 11px;
+            margin: 10px 0;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        @media screen and (max-width: 500px) {
+            body {
+                background-color: rgba(199, 199, 199, 0.404);
+            }
+        }
+
+        @media screen and (min-height: 765px) {
+            .container {
+                margin: 100px auto;
+            }
+        }
+
+        @media screen and (min-height: 1000px) {
+            .container {
+                margin: 150px auto;
+            }
+        }
+
+        @media screen and (min-height: 1140px) {
+            .container {
+                margin: 200px auto;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>تایید کد</h2>
+    <p>یک پیامک حاوی کد پنج رقمی برای شما ارسال شده است. لطفاً آن را وارد نمایید:</p>
+    <form action="{% url 'sms-confirmation' %}" method="post">
+        {% csrf_token %}
+        <input type="text" id="verification_code" name="verification_code" placeholder="کد تایید" required><br>
+        <input type="submit" value="تایید">
+    </form>
+</div>
+
+</body>
+</html>

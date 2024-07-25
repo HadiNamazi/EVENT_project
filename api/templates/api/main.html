@@ -1,0 +1,247 @@
+{% load static %}
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html dir="rtl" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVENT</title>
+    <link rel="icon" href="{% static 'images/icon.png' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-right {
+            margin-right: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            width: 100%;
+            text-align: center;
+            font-size: 15px;
+            margin-top: auto; /* Force footer to the bottom */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 50px; /* Add padding at the bottom */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: right;
+        }
+
+        td {
+            text-align: right;
+        }
+
+        a {
+            margin-right: 85px;
+            color: white;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            text-align: left;
+            margin-left: 85px;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        .right-align {
+            text-align: right;
+        }
+
+        .unselectable {
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .price {
+            color: black;
+            font-size: 16px;
+            margin-right: 0px;
+
+        }
+
+        .date {
+            font-size: 13px;
+            color: #333;
+        }
+
+        .credit_p, .credit_a {
+            font-size: 12px;
+            color: #a3a3a3;
+            text-align: center;
+        }
+        
+        .credit_a {
+            width: fit-content;
+            height: fit-content;
+        }
+
+        @media screen and (max-width: 736px) {
+            a {
+                font-size: 12px;
+            }
+            .logo-text {
+                font-size: 30px;
+            }
+        }
+
+        @media screen and (max-width: 412px) {
+            a {
+                font-size: 8px;
+                margin-right: 70px;
+            }
+            .logo-text {
+                font-size: 20px;
+                margin-left: 70px;
+            }
+            footer {
+                font-size: 12px;
+            }
+        }
+
+        @media screen and (max-width: 364px) {
+            a {
+                font-size: 7px;
+            }
+            .logo-text {
+                font-size: 20px;
+            }
+        }
+
+        @media screen and (max-width: 318px) {
+            a {
+                font-size: 7px;
+                margin-right: 60px;
+            }
+            .logo-text {
+                font-size: 20px;
+                margin-left: 60px;
+            }
+        }
+
+        @media screen and (max-width: 284px) {
+            a {
+                font-size: 7px;
+                margin-right: 40px;
+            }
+            .logo-text {
+                font-size: 20px;
+                margin-left: 40px;
+            }
+        }
+
+        @media screen and (min-height: 708px) {
+            footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+
+            }
+        }
+
+        .table-container {
+            max-height: 400px;
+            height: 400px;
+            overflow: auto;
+        }
+    </style>
+
+</head>
+<body>
+
+<header>
+    {% if access_level == 0 %}
+        <a href="/admin/">ورود به پنل ادمین</a>
+    {% else %}
+        <a href="{% url 'logout-view' %}">خروج از اکانت</a>
+    {% endif %}
+    <a class="logo-text" href="">EVENT</a>
+</header>
+
+<div class="container">
+
+    <h2 class="right-align">لیست قطعات</h2>
+
+    <p class="date">تاریخ بروزرسانی جدول: {{last_modified}}</p>
+
+    <div class="table-container">
+        <table class="unselectable">
+            <tr>
+                <!-- <th>ردیف</th> -->
+                <th>نام قطعه</th>
+                <th>گروه</th>
+                <th>قیمت</th>
+            </tr>
+            {% for product in products %}
+                <tr>
+                    <td>{{product.name}}</td>
+                    <td>{{product.group}}</td>
+                    {% if access_level == 0 or access_level == 1 %}
+                        <td>{{product.price1}}</td>
+                    {% endif %}
+                    {% if access_level == 2 %}
+                        <td>{{product.price2}}</td>
+                    {% endif %}
+                    {% if access_level == 3 %}
+                        <td>{{product.price3}}</td>
+                    {% endif %}
+                    {% if access_level == 4 %}
+                        <td>{{product.price4}}</td>
+                    {% endif %}
+                    {% if access_level == 5 %}
+                        <td><a href="{% url 'register-req' %}" class="price">مشاهده قیمت</a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<footer>
+    <p><img src="{% static 'images/phone.png' %}" alt="icon" style="width:20px; height:20px; vertical-align:middle;">  05138513535</p>
+    <p><img src="{% static 'images/mobile.png' %}" alt="icon" style="width:20px; height:20px; vertical-align:middle;">  09153150588</p>
+    <p><img src="{% static 'images/location.png' %}" alt="icon" style="width:20px; height:20px; vertical-align:middle;">  مشهد - خیابان امام رضا - پلاک 73</p>
+</footer>
+</body>
+</html>
