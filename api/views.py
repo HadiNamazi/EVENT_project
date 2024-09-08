@@ -4,11 +4,19 @@ import sys
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from . import models
-sys.path.append("..")
 from django.conf import settings
 from random import randint
 from hashlib import sha256
 from jdatetime import datetime
+import os
+from dotenv import load_dotenv
+
+sys.path.append("..")
+
+# loading .env file
+load_dotenv()
+XAPIKEY = os.getenv('XAPIKEY')
+ADMIN_PHONE_NUMBER = os.getenv('ADMIN_PHONE_NUMBER')
 
 def phone_number_checker(phone_number):
     if len(phone_number) == 11 and phone_number[:2] == '09':
@@ -27,7 +35,7 @@ def confirm_code_sms(phone_number, code):
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'text/plain',
-        'x-api-key': '***'
+        'x-api-key': XAPIKEY,
     }
 
     # Encode payload and headers to bytes
@@ -54,7 +62,7 @@ def admin_sms(phone_number, code=None, phone_dest=None):
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'text/plain',
-        'X-API-KEY': '***'
+        'X-API-KEY': XAPIKEY,
     }
     conn.request("POST", "/v1/send/likeToLike", payload, headers)
     res = conn.getresponse()
@@ -164,7 +172,7 @@ def register_confirm(req):
         user = req.user
         user.register_req = True
         user.save()
-        admin_sms('***', phone_dest=user.phone_number)
+        admin_sms(ADMIN_PHONE_NUMBER, phone_dest=user.phone_number)
     except:
         pass
     return redirect('main')
